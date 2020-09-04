@@ -1,0 +1,6 @@
+{
+    "experiment": "exp-churn",
+    "cluster_name": "std-ds3-v2",
+    "environment_name": "AzureML-Minimal"
+
+}

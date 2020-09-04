@@ -1,0 +1,8 @@
+channels:
+- conda-forge
+dependencies:
+- python=3.6.2
+- pip:
+  - azureml-core==1.13.0
+  - azureml-defaults==1.13.0
+name: azureml_ae21f5ad7239cc0597194d9abb256568
