@@ -63,10 +63,61 @@ Here is an example of a set of minimum (Level 1) MLOps requirements and the full
 
 | Aspects     | Minimum Requirement                                                                                                        | Full Requirement                                                                                                                  |
 | ----------- | -------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| Environment |dev: for experimentation and coding<br> prod (or stage or whatever you fancy): the environment hosting the whole solution | dev/stage/prod and others if required                                                                                             |
+| Environment |  dev: for experimentation and coding<br> prod (or stage or whatever you fancy): the environment hosting the whole solution | dev/stage/prod and others if required                                                                                             |
 |             |                                                                                                                            |                                                                                                                                   |
 | Code        | CD integration pipeline for automated training pipeline and scoring service                                                | CI pipeline on Master branch (or other branch)<br>CD pipeline for integration of all parts: training,                             |
 |             |                                                                                                                            |                                                                                                                                   |
 | Data        | Raw data are centralised and updated automatically                                                                         | Data validation<br>Data drifts detection<br>Feature store for reusability                                                         |
 |             |                                                                                                                            |                                                                                                                                   |
-| Model       | Model performance logged during training      
+| Model       | Model performance logged during training                                                                                   | Automated model validation against holdout set<br>trigger for automated training<br>scored data and results logged<br>A/B Testing |
+
+This template will provide the basic elements to quickly setup a minimal MLOps processes so that the team can move quickly from the basic level to the most advance MLops infrastructure
+
+## Azure Machine Learning
+
+Azure machine learning provides a lot of different APIs and tools to create an optimal MLOps infrastructure. We will review the different tools and provide some recommendation on how to best leverage the latter. We will focus review managing data, training and scoring process and review which credentials are required to access the resources
+
+### Training in Azure
+
+It is important to understand how training is performed in azure. In essence, one writes normal core machine learning scripts like train.py, score.py, etc and another set of separate scripts that will perform environment configuration and execute the core scripts on a remote machine, as for instance a VM or AKS cluster as explained [here](https://docs.microsoft.com/en-us/azure/machine-learning/concept-environments). One can choose to either use python scripts (or R) to execute the remote run or Azure CLI. We do not recommend the later as it constrains too much the experimentation (question 1). 
+
+For simplicity, I will call the set of core script "Core Scripts", that you can find in the *src folder*, and the other set "Ops Scripts", saved in the *operation folder* as they handle the operation. Why is this distinction so important ? Azure has different ways for handling credentials and each set of scripts use different approaches to handle access to the workspace and datasets. We discuss this point in the next section.
+
+### Workspace
+
+The central piece of Azure ML is the Workspace. Every process is executed or linked to it Workspace, as for instance when retrieving datasets, uploading models to the registry, running automl, etc. There are 3 main way to retrieve, and a secondary:
+
+1. The most straight forward is through the azure portal. You can download the _config.json_ from your aml resource page. This method is used for Core and Ops scripts when developing on the local machine.
+2. Through the _run_ object. This is used in Core Scripts to access the workspace when run on a remote compute. An example can be [found here](https://github.com/Azure/MachineLearningNotebooks/blob/71861278041bfc37557293adb94d844e5e36e60e/how-to-use-azureml/automated-machine-learning/regression-explanation-featurization/train_explainer.py). 
+
+```
+run = Run.get_context() 
+ws = run.experiment.workspace
+```
+
+3. Through a service principal stored as environment variable. This method is used in devops pipelines when performing integration. To generate and use service principals follow [this link](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-setup-authentication)
+
+In the *src* and *operation/execution* folder, one can find the _utils.py_ scripts that shows how the credentials are retrieved.
+
+Now that we know how to get the workspace credentials we can show how to train a model, handle the data, and define a scoring script.
+
+### Training
+
+There are 4 different ways in AML to run a training script. The full explanation can be [found here](https://docs.microsoft.com/en-us/azure/machine-learning/concept-train-machine-learning-model)
+
+1. *Run_config*: this approaches is useful if you want either quickly setup your environment or spend time fine tuning it. Also, it can be used to execute pyspark job on hdinsights.
+2. *Estimator*: this is probably the most straightforward method. Azure has a setup of already configured environment that are very useful when using deep learning frameworks like TensorFlow, Pytorch, etc. Of course, it also accepts your conda environment or pip requirement file.
+3. *AutoMl*: very simple way to generate automated model training. It doesn't need any Core Scripts. As a side note, if one doesn't like using this service, we recommend testing it as a baseline to your custom model.
+4. *Machine Learning Pipeline*: very useful when one needs to run a sequence of scripts or uses a "multi-model" approach as for instance in demand forecasting where one model is trained per product.
+
+All the approaches allow to either can handle the datasets by either passing them as arguments from the Ops Scripts to the Core Scripts or inside the later. We discuss how to manage the data in the next session.
+
+### Data
+
+As stated before, we assume that all the datasets are stored in a single source (the approach is the same if data are in different storages). With AzureML, there are 3 different way to upload,download,load,save data :
+
+1. Using the Datastore/Dataset objects directly from the aml sdk
+2. Using the Datastore/Dataset objects passed as arguments to a script and extracted via the _run_ object
+3. Using azure storage sdk like [the blob library](https://pypi.org/project/azure-storage-blob/)
+
+In case 1,the datasets are registered in the workspace and thus we need to retrieve the workspace credentials. When developing on a local machine, the credentials are retrieved from the portal and stored in a config.json file. When run on a remote machine, the workspace credentials are retrieved from the _run context_ as show in 
