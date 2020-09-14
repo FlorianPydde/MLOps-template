@@ -1,16 +1,23 @@
 import joblib
 import pandas as pd
 from azureml.core.model import Model
+from utils import retrieve_workspace
 # from inference_schema.schema_decorators import input_schema, output_schema
 # from inference_schema.parameter_types.numpy_parameter_type import NumpyParameterType
+
+model = None
 
 def init():
     global model
 
+    # If you deploy the model in a custom docker
+    # ws = retrieve_workspace()
+    # model_reg = Model(ws, name = 'mymodel.pkl')
+    # model_reg.download('./model', exist_ok = False)
+    # model = joblib.load('./model/mymodel.pkl')
+
     # Retrieve the path to the model file using the model name
-    # Assume original model is named original_prediction_model
-    
-    model_path = Model.get_model_path('name of model',version=0)
+    model_path = Model.get_model_path('name of model')
     model = joblib.load(model_path)
 
 
