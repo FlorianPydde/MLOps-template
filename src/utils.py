@@ -1,6 +1,8 @@
 from azureml.core import Run, Dataset, Workspace
+from azureml.core.authentication import ServicePrincipalAuthentication
 import argparse
 import sys
+import os
 from pathlib import Path
 import pandas as pd
 
@@ -15,6 +17,17 @@ def retrieve_workspace() -> Workspace:
 
     try:
         ws = Workspace.from_config()
+    except Exception as e:
+        print('Workspace config not found in local folder', e)
+
+    try:
+        sp = ServicePrincipalAuthentication(tenant_id=os.environ['AML_TENANT_ID'],
+                                    service_principal_id=os.environ['AML_PRINCIPAL_ID'],
+                                    service_principal_password=os.environ['AML_PRINCIPAL_PASS']
+                                    )
+        ws = Workspace.get(name="ml-example",
+                   auth=sp,
+                   subscription_id="your-sub-id")
     except Exception as e:
         print('Workspace config not found in project', e)
     
