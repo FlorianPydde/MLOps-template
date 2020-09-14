@@ -81,7 +81,7 @@ Azure machine learning provides a lot of different APIs and tools to create an o
 
 It is important to understand how training is performed in azure. In essence, one writes normal core machine learning scripts like train.py, score.py, etc and another set of separate scripts that will perform environment configuration and execute the core scripts on a remote machine, as for instance a VM or AKS cluster as explained [here](https://docs.microsoft.com/en-us/azure/machine-learning/concept-environments). One can choose to either use python scripts (or R) to execute the remote run or Azure CLI. We do not recommend the later as it constrains too much the experimentation (question 1). 
 
-For simplicity, I will call the set of core script "Core Scripts", that you can find in the *src folder*, and the other set "Ops Scripts", saved in the *operation folder* as they handle the operation. Why is this distinction so important ? Azure has different ways for handling credentials and each set of scripts use different approaches to handle access to the workspace and datasets. We discuss this point in the next section.
+For simplicity, I will call the set of core script "Core Scripts", that you can find in the **src folder**, and the other set "Ops Scripts", saved in the **operation folder** as they handle the operation. Why is this distinction so important ? Azure has different ways for handling credentials and each set of scripts use different approaches to handle access to the workspace and datasets. We discuss this point in the next section.
 
 ### Workspace
 
@@ -97,7 +97,7 @@ ws = run.experiment.workspace
 
 3. Through a service principal stored as environment variable. This method is used in devops pipelines when performing integration. To generate and use service principals follow [this link](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-setup-authentication)
 
-In the *src* and *operation/execution* folder, one can find the _utils.py_ scripts that shows how the credentials are retrieved.
+In the **src** and **operation/execution** folder, one can find the _utils.py_ scripts that shows how the credentials are retrieved.
 
 Now that we know how to get the workspace credentials we can show how to train a model, handle the data, and define a scoring script.
 
@@ -105,10 +105,10 @@ Now that we know how to get the workspace credentials we can show how to train a
 
 There are 4 different ways in AML to run a training script. The full explanation can be [found here](https://docs.microsoft.com/en-us/azure/machine-learning/concept-train-machine-learning-model)
 
-1. *Run_config*: this approaches is useful if you want either quickly setup your environment or spend time fine tuning it. Also, it can be used to execute pyspark job on hdinsights.
-2. *Estimator*: this is probably the most straightforward method. Azure has a setup of already configured environment that are very useful when using deep learning frameworks like TensorFlow, Pytorch, etc. Of course, it also accepts your conda environment or pip requirement file.
-3. *AutoMl*: very simple way to generate automated model training. It doesn't need any Core Scripts. As a side note, if one doesn't like using this service, we recommend testing it as a baseline to your custom model.
-4. *Machine Learning Pipeline*: very useful when one needs to run a sequence of scripts or uses a "multi-model" approach as for instance in demand forecasting where one model is trained per product.
+1. **Run_config**: this approaches is useful if you want either quickly setup your environment or spend time fine tuning it. Also, it can be used to execute pyspark job on hdinsights.
+2. **Estimator**: this is probably the most straightforward method. Azure has a setup of already configured environment that are very useful when using deep learning frameworks like TensorFlow, Pytorch, etc. Of course, it also accepts your conda environment or pip requirement file.
+3. **AutoMl**: very simple way to generate automated model training. It doesn't need any Core Scripts. As a side note, if one doesn't like using this service, we recommend testing it as a baseline to your custom model.
+4. **Machine Learning Pipeline**: very useful when one needs to run a sequence of scripts or uses a "multi-model" approach as for instance in demand forecasting where one model is trained per product.
 
 All the approaches allow to either can handle the datasets by either passing them as arguments from the Ops Scripts to the Core Scripts or inside the later. We discuss how to manage the data in the next session.
 
