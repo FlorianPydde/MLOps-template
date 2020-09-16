@@ -8,8 +8,8 @@ The base project structure was inspired by the following [dslp repo](https://git
 
 ## TL;DR
 
-Examples of core machine learning scripts like training, scoring, etc are saved in _src_. Examples of scripts to run the core scripts on remote compute, aks clusters, etc are saved in _operation/execution_. To use the scripts on your local machine, the azure ml workspace credentials in a config.json file in the root directory.
-We do not provide any concrete implementation of MLOps but only the folder structure and some examples, as the naming convention and logical flow highly depend on the use case.
+Examples of core machine learning scripts like training, scoring, etc are saved in _src_. Examples of scripts that run the core scripts on remote compute, aks clusters, etc are saved in _operation/execution_. To use the scripts on your local machine, add the azure ml workspace credentials in a config.json file in the root directory.
+We do not provide any concrete implementation of MLOps but only the folder structure and some examples, as the naming convention and logical flow highly depend on the use case. Nevertheless, you may want to have a look at the utils.py modules which handle the credentials.
 
 ## Contributing
 
@@ -120,4 +120,20 @@ As stated before, we assume that all the datasets are stored in a single source 
 2. Using the Datastore/Dataset objects passed as arguments to a script and extracted via the _run_ object
 3. Using azure storage sdk like [the blob library](https://pypi.org/project/azure-storage-blob/)
 
-In case 1,the datasets are registered in the workspace and thus we need to retrieve the workspace credentials. When developing on a local machine, the credentials are retrieved from the portal and stored in a config.json file. When run on a remote machine, the workspace credentials are retrieved from the _run context_ as show in 
+**Case (1)**, the datasets are registered in the workspace and thus we need to retrieve the workspace credentials. We already described how to perform that step in the _workspace_ section. Basically, when developing on a local machine, the credentials are retrieved from the portal and stored in a config.json file. When run on a remote machine, the workspace credentials are retrieved from the _run context_.
+
+**Case (2)** is more common when using AML Pipelines as shown in [this example](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-move-data-in-out-of-pipelines)
+
+**Case (3)** is less common but can be leverage when clients do not wish to use the datastore/dataset functionalities due to security concern. The main difference is that the access credentials to the data location is handled either directly through keyvault or through the AML workspace (which uses keyvault under the hood).
+
+### Scoring/Inferencing
+
+The scoring part is probably the less trivial to generalize. Indeed, it does not only depend on the training approach but also on the customer's constraints. AML proposes different methods to package the code and model, and also diverse deployment targets. Even though there are multiple ways to deploy a script, the core scoring script keeps most of the time the same structure. You can find an example in the _src_ folder.
+
+For the deployment targets, you can find an exhaustive list of target under [Choose a compute target](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-deploy-and-where?tabs=azcli). It is worth noting that all the targets leverage Docker.
+
+We will list here the different approach to package your service:
+
+1. If the data science team manage a production target (AKS, VM, etc), the team can use the **Model Deploy** functionality and all the configuration is taken care of, as explained here[under deploy model](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-deploy-and-where?tabs=python).
+
+2. In most companies, the production environment is managed by a dedicated team. For this scenario, one can choose to use the **aml package** approach or create a _Flask_ app hosted in a docker. In both cases, the production team receives a docker file to deploy. **Warning!**! In
