@@ -126,7 +126,7 @@ As stated before, we assume that all the datasets are stored in a single source 
 
 **Case (3)** is less common but can be leverage when clients do not wish to use the datastore/dataset functionalities due to security concern. The main difference is that the access credentials to the data location is handled either directly through keyvault or through the AML workspace (which uses keyvault under the hood).
 
-### Scoring/Inferencing
+### Score/Infer
 
 The scoring part is probably the less trivial to generalize. Indeed, it does not only depend on the training approach but also on the customer's constraints. AML proposes different methods to package the code and model, and also diverse deployment targets. Even though there are multiple ways to deploy a script, the core scoring script keeps most of the time the same structure. You can find an example in the _src_ folder.
 
@@ -134,6 +134,9 @@ For the deployment targets, you can find an exhaustive list of target under [Cho
 
 We will list here the different approach to package your service:
 
-1. If the data science team manage a production target (AKS, VM, etc), the team can use the **Model Deploy** functionality and all the configuration is taken care of, as explained here[under deploy model](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-deploy-and-where?tabs=python).
+1. If the data science team manage a production target (AKS, VM, etc), the team can use the **Model Deploy** functionality and all the configuration is taken care of, as explained here [under deploy model](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-deploy-and-where?tabs=python).
 
-2. In most companies, the production environment is managed by a dedicated team. For this scenario, one can choose to use the **aml package** approach or create a _Flask_ app hosted in a docker. In both cases, the production team receives a docker file to deploy. **Warning!**! In
+2. In most companies, the production environment is managed by a dedicated team. For this scenario, one can choose to use the [**aml package**](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-deploy-package-models) approach or create a _Flask_ app hosted in a docker. In both cases, the production team receives a docker file to deploy.  
+   - **Warning!** when using the aml package functionality, the docker file retrieve a base image from an azure container registry (ACR). This means that the production team has to have access to the ACR
+  
+   - In the second case, you have two options: either create your fully custom docker file with flask and download the model from the registry, or download the script from within the scoring script which means docker/aks has to have access to the workspace.
