@@ -3,6 +3,8 @@ from azureml.core.authentication import ServicePrincipalAuthentication
 
 import os
 import sys
+import json
+from pathlib import Path
 
 def retrieve_workspace():
     ws = None
@@ -39,4 +41,6 @@ def retrieve_workspace():
         print('Error - Shuting everything down.')
         sys.exit(-1)
 
-print(type(retrieve_workspace()))
+def retrieve_config():
+    config_path = Path('../configuration/configuration.json')
+    return json.load(config_path)
