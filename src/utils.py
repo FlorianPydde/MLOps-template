@@ -33,7 +33,7 @@ def retrieve_workspace() -> Workspace:
     
     return ws
 
-def get_dataset(filename=str):
+def get_dataset(filename:str, datastore:str, path_datastore:str):
 
     df = None
     #get the data when run by external scripts
@@ -49,7 +49,7 @@ def get_dataset(filename=str):
     try:
         ws = retrieve_workspace()
         datastore = ws.get_default_datastore()
-        dataset = Dataset.File.from_files(path = [(datastore,'<path on datastore>')])
+        dataset = Dataset.File.from_files(path = [(datastore,path_datastore)])
         df = dataset.to_pandas_dataframe()
     except Exception as e:
         print('Error while retrieving from datastore',e)
