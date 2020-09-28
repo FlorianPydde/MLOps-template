@@ -83,7 +83,7 @@ It is important to understand how training is performed in azure. In essence, on
 
 For simplicity, I will call the set of core script "Core Scripts", that you can find in the **src folder**, and the other set "Ops Scripts", saved in the **operation folder** as they handle the operation. Why is this distinction so important ? Azure has different ways for handling credentials and each set of scripts use different approaches to handle access to the workspace and datasets. We discuss this point in the next section.
 
-### Workspace
+### Workspace/Secrets
 
 The central piece of Azure ML is the Workspace. Every process is executed or linked to it Workspace, as for instance when retrieving datasets, uploading models to the registry, running automl, etc. There are 3 main way to retrieve, and a secondary:
 
@@ -140,3 +140,11 @@ We will list here the different approach to package your service:
    - **Warning!** when using the aml package functionality, the docker file retrieve a base image from an azure container registry (ACR). This means that the production team has to have access to the ACR
   
    - In the second case, you have two options: either create your fully custom docker file with flask and download the model from the registry, or download the script from within the scoring script which means docker/aks has to have access to the workspace.
+
+### Variable Handling
+
+**!DO NOT ADDED ANY SECRETS OR KEYS IN CONFIGURATION FILES THAT ARE NOT PART OF THE GITIGNORE!**
+
+There are many constants and variables to handle in a data science project, as for instance the datasets name, the model name, model variables, etc. It is important to distinguish between configuration variables and environment variables. Indeed, environment variables only depend on the environment in which a script is run, i.e dev/stage/prod (or whatever the convention). Hence, we recommend to understand what needs to be stored in a config/settings file and what should come from the os environment. It is not necessary to define a specific _.ENV_ files as the variables will be added in the CI/CD pipelines in Azure DevOps (or whatever DevOps tool one uses). Indeed, when developing in dev, we can simply use the default function ```os.getenv('ENV_VARIABLE', 'your-dev-env-variable')```.
+
+For standard configuration variables, there is **one main guideline to follow**: Core Scripts should not contain any hardcoded variables in the code ! All variables must come from the scripts argument and may be hardcoded in the argument as default value as follows ``args.add_argument('--model_name',default='mymodel.pkl', type=str, help='')``. You might ask yourself now: 'what's this strange rule ?'. Well, all variables ought be in configuration files in a single place. This helps quickly adding/removing/updating variables. Ok, but we could still have added them to our Core Scripts. Again, you must remember that these scripts will eventually be run by our Op Scripts. These Op Scripts can easily handle the arguments from a config files to forward them to the Core Scripts. Indeed, the Op Scripts are commonly run in a virtual agent which contains all the project files. Thus, the path to the configuration will always be constant and there is no need to use ``sys.path`` or other cumbersome tricks to find the correct path.
