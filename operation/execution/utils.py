@@ -6,12 +6,11 @@ import sys
 import json
 from pathlib import Path
 
-def retrieve_workspace():
+def retrieve_workspace() -> Workspace:
     ws = None
 
     try:
         ws = Workspace.from_config()
-
         return ws
 
     except Exception as e:
@@ -31,7 +30,6 @@ def retrieve_workspace():
             auth=sp,
             subscription_id=os.environ['SUBSCRIPTION_ID']
             )
-
         return ws
     except Exception as e:
         print('Connection via SP failed:', e)

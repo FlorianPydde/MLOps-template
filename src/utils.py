@@ -1,5 +1,6 @@
 from azureml.core import Run, Dataset, Workspace
 from azureml.core.authentication import ServicePrincipalAuthentication
+from azureml.core.run import _OfflineRun
 import argparse
 import sys
 import os
@@ -11,12 +12,15 @@ def retrieve_workspace() -> Workspace:
 
     try:
         run = Run.get_context()
-        ws = run.experiment.workspace
+        if not isinstance(run,_OfflineRun):
+            ws = run.experiment.workspace
+            return ws
     except Exception as e:
         print('Workspace from run not found', e)
 
     try:
         ws = Workspace.from_config()
+        return ws
     except Exception as e:
         print('Workspace config not found in local folder', e)
 
@@ -33,7 +37,7 @@ def retrieve_workspace() -> Workspace:
     
     return ws
 
-def get_dataset(filename:str, datastore:str, path_datastore:str):
+def get_dataset(filename:str = '', datastore:str = '', path_datastore:str = ''):
 
     df = None
     #get the data when run by external scripts
