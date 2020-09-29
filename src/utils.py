@@ -51,7 +51,15 @@ def get_dataset(filename:str = '', datastore:str = '', path_datastore:str = ''):
     except Exception as e:
         print('Dataset not present in run', e)
     
-    #get dataset from datastore/Dataset registry
+    #get dataset from Dataset registry
+    try:
+        ws = retrieve_workspace()
+        dataset = Dataset.get_by_name(ws,filename)
+        df = dataset.to_pandas_dataframe()
+    except Exception as e:
+        print('Error while retrieving from datastore',e)
+    
+    #get dataset directly from datastore 
     try:
         ws = retrieve_workspace()
         datastore = ws.get_default_datastore()
