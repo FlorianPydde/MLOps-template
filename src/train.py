@@ -15,10 +15,12 @@ def train():
 if __name__ == '__main__':
 
     args = argparse.ArgumentParser()
-    args.add_argument('--input_ds',default='./data', type=str, help='')
+    args.add_argument('--input_ds',dest='input_ds',default='ds_diabetes', type=str, help='')
     args.add_argument('--output_dir',default='./output', type=str, help='')
     args.add_argument('--output_filename', default='model.pkl', type=str, help='')
 
+    parse, _ = args.parse_known_args()
+
     #add filename, datastore or path on datastore depending on approach
-    get_dataset(args.input_ds)
+    get_dataset(parse.input_ds)
     train()
