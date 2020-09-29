@@ -114,5 +114,4 @@ venv.bak/
 .DS_Store
 
 #custom
-notebooks/
 config.json
