@@ -12,10 +12,6 @@ model = None
 def init():
     global model
 
-    parser = argparse.ArgumentParser(description="Variables ")
-    parser.add_argument('--model_name', dest="model_name", default='mymodel.pkl', required=True)
-    args, _ = parser.parse_known_args()
-
     # If you deploy the model in a custom docker
     # ws = retrieve_workspace()
     # model_reg = Model(ws, name = args.model_name)
@@ -23,7 +19,7 @@ def init():
     # model = joblib.load('./model/args.model_name)
 
     # Retrieve the path to the model file using the model name
-    model_path = Model.get_model_path(args.model_name)
+    model_path = Model.get_model_path('<model name here>')
     model = joblib.load(model_path)
 
 
