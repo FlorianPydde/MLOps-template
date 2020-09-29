@@ -44,8 +44,10 @@ def get_dataset(filename:str = '', datastore:str = '', path_datastore:str = ''):
 
     try:
         run = Run.get_context()
-        dataset = run.input_datasets[filename]
-        df = dataset.to_pandas_dataframe()
+        if not isinstance(run,_OfflineRun):
+            dataset = run.input_datasets[filename]
+            df = dataset.to_pandas_dataframe()
+            return df
     except Exception as e:
         print('Dataset not present in run', e)
     
