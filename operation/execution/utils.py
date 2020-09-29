@@ -39,6 +39,12 @@ def retrieve_workspace() -> Workspace:
         print('Error - Shuting everything down.')
         sys.exit(-1)
 
+# Retrieve config json
 def retrieve_config():
-    config_path = Path('../configuration/configuration.json')
-    return json.load(config_path)
+    config = {}
+    #go 2 layer up
+    util_path = Path(__file__).parents[1]
+    config_path = util_path / 'configuration' / 'configuration.json'
+    with open(config_path, mode='r', encoding='utf-8') as input_file:
+        config = json.load(input_file)
+    return config
