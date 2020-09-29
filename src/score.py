@@ -3,6 +3,7 @@ import pandas as pd
 import argparse 
 from azureml.core.model import Model
 from utils import retrieve_workspace
+import os
 
 # from inference_schema.schema_decorators import input_schema, output_schema
 # from inference_schema.parameter_types.numpy_parameter_type import NumpyParameterType
@@ -14,12 +15,16 @@ def init():
 
     # If you deploy the model in a custom docker
     # ws = retrieve_workspace()
-    # model_reg = Model(ws, name = args.model_name)
+    # model_name = 'model_name here'
+    # model_reg = Model(ws, name = model_name)
     # model_reg.download('./model', exist_ok = False)
-    # model = joblib.load('./model/args.model_name)
+    # model = joblib.load('./model/model_name)
+    # model_path = Model.get_model_path()
+
 
     # Retrieve the path to the model file using the model name
-    model_path = Model.get_model_path('<model name here>')
+    model_path = os.path.join(os.getenv('AZUREML_MODEL_DIR'), '<model name here>')
+
     model = joblib.load(model_path)
 
 
