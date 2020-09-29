@@ -56,6 +56,7 @@ def get_dataset(filename:str = '', datastore:str = '', path_datastore:str = ''):
         ws = retrieve_workspace()
         dataset = Dataset.get_by_name(ws,filename)
         df = dataset.to_pandas_dataframe()
+        return df
     except Exception as e:
         print('Error while retrieving from datastore',e)
     
@@ -65,6 +66,7 @@ def get_dataset(filename:str = '', datastore:str = '', path_datastore:str = ''):
         datastore = ws.get_default_datastore()
         dataset = Dataset.File.from_files(path = [(datastore,path_datastore)])
         df = dataset.to_pandas_dataframe()
+        return df
     except Exception as e:
         print('Error while retrieving from datastore',e)
 
