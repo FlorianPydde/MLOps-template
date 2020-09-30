@@ -23,7 +23,7 @@ is required to install the project environment on a different laptop, devops age
 
 4. There are only 2 core secrets to handle: the azureml workspace authentication key and a service principal. Depending on your use-case or constraints, these secrets may be required in the core scripts or execution scripts. We provide the logic to retrieve them in a **_utils.py_** file in both **_src_** and **_operation/execution_**.
 
-Environment variables that need to be provided:
+Environment variables must be provided:
 
 1. Mandatory
 
