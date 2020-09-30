@@ -26,6 +26,7 @@ is required to install the project environment on a different laptop, devops age
 Environment variables that need to be provided:
 
 1. Mandatory
+
 ```
 tenant id: service principal tenant id. Default name in code: AML_TENANT_ID
 principal id: service principal appId. Default name in code: AML_PRINCIPAL_ID
@@ -35,6 +36,7 @@ subscription id: azure subscription id containing your workspace. Default name i
 ```
 
 2. Optional
+
 ```
 compute target name: if your are using different computes in your environments.
 inference target: can be and ACI, AKS, VM for your inference.
