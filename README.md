@@ -23,6 +23,24 @@ is required to install the project environment on a different laptop, devops age
 
 4. There are only 2 core secrets to handle: the azureml workspace authentication key and a service principal. Depending on your use-case or constraints, these secrets may be required in the core scripts or execution scripts. We provide the logic to retrieve them in a **_utils.py_** file in both _src_ and _operation/execution_.
 
+Environment variables that need to be provided:
+
+1. Mandatory
+```
+tenant id: service principal tenant id. Default name in code: AML_TENANT_ID
+principal id: service principal appId. Default name in code: AML_PRINCIPAL_ID
+principal pass: service principal password. Default name in code: AML_PRINCIPAL_PASS
+workspace name: workspace name of your test and/or prod (depending on your approach). Default name in code: AML_WORKSPACE_NAME
+subscription id: azure subscription id containing your workspace. Default name in code: SUBSCRIPTION_ID
+```
+
+2. Optional
+```
+compute target name: if your are using different computes in your environments.
+inference target: can be and ACI, AKS, VM for your inference.
+datastore/dataset name: if you are using different data source during your CI/CD pipeline (though PROD data must be available for the data scientist)
+```
+
 We do not provide any concrete implementation of MLOps but only the folder structure and some examples, as the naming convention and logical flow highly depend on the use case. Nevertheless, ou may want to have a look at the utils.py modules which handle the credentials.
 
 ## Contributing
@@ -59,7 +77,7 @@ TBD
 |── src
 ├── .gitignore
 ├── README.md
-└── setup.py 
+└── setup.py
 ```
 
 ## MLOps template guidelines
