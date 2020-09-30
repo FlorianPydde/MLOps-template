@@ -40,6 +40,7 @@ subscription id: azure subscription id containing your workspace. Default name i
 ```
 compute target name: if your are using different computes in your environments.
 inference target: can be and ACI, AKS, VM for your inference.
+AppInsight Instrumentation key: app insight key to use python logger.
 datastore/dataset name: if you are using different data source during your CI/CD pipeline (though PROD data must be available for the data scientist)
 ```
 
