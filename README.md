@@ -8,20 +8,20 @@ The base project structure was inspired by the following [dslp repo](https://git
 
 ## TL;DR
 
-Examples of core machine learning scripts like training, scoring, etc are saved in _src_. The other scripts that managed the core scripts by, for instance, sending to training compute target, to ask, registering a model, etc are all stored in _operation/execution_. The folder contains some examples using the azureml python sdk. It is also possible to use the azure-cli to handle the execution of the core scripts, which is the preferred option by DevOps engineers usually.
+Examples of core machine learning scripts like training, scoring, etc are saved in **_src_**. The other scripts that managed the core scripts by, for instance, sending to training compute target, to ask, registering a model, etc are all stored in **_operation/execution_**. The folder contains some examples using the azureml python sdk. It is also possible to use the azure-cli to handle the execution of the core scripts, which is the preferred option by DevOps engineers usually.
 
-To use the scripts on your local machine, add the azure ml workspace credentials in a config.json file in the root directory and **very important (!)** add it to the gitignore file, if it is not present already.
+To use the scripts on your local machine, add the azure ml workspace credentials in a **config.json** file in the root directory and **very important (!)** add it to the gitignore file, if it is not present already.
 
 Some general guidelines:
 
 1. Core scripts should receive parameters/config variables only via code arguments and must not contain any hardcoded variables in the code, as for instance dataset names, model names, input/output path, etc. If you want to provide constant variables in those scripts, write default values in the argument parser.
 
-2. Variable names must be stored in _operation/configuration_ as _.json_, _.ini_, _.yml_ or whatever you fancy. These files will be used by the execution scripts (azureml python sdk or azure-cli) to run the core scripts
+2. Variable names must be stored in **_operation/configuration_** as **_.json_**, **_.ini_**, **_.yml_** or whatever you fancy. These files will be used by the execution scripts (azureml python sdk or azure-cli) to run the core scripts
 
-3. There are 2 distinct configuration files for environment creation: (1) for local dev/experimentation which can be stored in the project root folder (as requirement.txt, environment.yml), and (2) in _operation/configuration_ in whatever format accepted by azureml (_yml_, _json_, etc). (1)
+3. There are 2 distinct configuration files for environment creation: (1) for local dev/experimentation which can be stored in the project root folder (as requirement.txt, environment.yml), and (2) in **_operation/configuration_** in whatever format accepted by azureml (**_yml_**, **_json_**, etc). (1)
 is required to install the project environment on a different laptop, devops agent, etc and (2) contains only the necessary packages to be installed on remote compute targets or AKS that are hosting the core scripts
 
-4. There are only 2 core secrets to handle: the azureml workspace authentication key and a service principal. Depending on your use-case or constraints, these secrets may be required in the core scripts or execution scripts. We provide the logic to retrieve them in a **_utils.py_** file in both _src_ and _operation/execution_.
+4. There are only 2 core secrets to handle: the azureml workspace authentication key and a service principal. Depending on your use-case or constraints, these secrets may be required in the core scripts or execution scripts. We provide the logic to retrieve them in a **_utils.py_** file in both **_src_** and **_operation/execution_**.
 
 Environment variables that need to be provided:
 
@@ -52,7 +52,7 @@ TBD
 ## Default Directory Structure
 
 ```
-├───azure_pipelines     # folder containing all the azure devops pipelines
+├───azure-pipelines     # folder containing all the azure devops pipelines
 ├── data                # directory is for consistent data placement. contents are gitignored by default.
 │   ├── README.md
 │   ├── interim         # storing intermediate results (mostly for debugging)
