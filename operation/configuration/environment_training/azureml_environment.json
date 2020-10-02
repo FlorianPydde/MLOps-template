@@ -1,6 +1,6 @@
 {
     "name": "AzureML-Minimal",
-    "version": "36",
+    "version": "38",
     "environmentVariables": {
         "EXAMPLE_ENV_VAR": "EXAMPLE_VALUE"
     },
@@ -15,13 +15,17 @@
         "baseImage": "mcr.microsoft.com/azureml/intelmpi2018.3-ubuntu16.04:20200821.v1",
         "baseDockerfile": null,
         "sharedVolumes": true,
-        "gpuSupport": false,
         "shmSize": null,
         "arguments": [],
         "baseImageRegistry": {
             "address": null,
             "username": null,
-            "password": null
+            "password": null,
+            "registryIdentity": null
+        },
+        "platform": {
+            "os": "Linux",
+            "architecture": "amd64"
         }
     },
     "spark": {
@@ -36,5 +40,6 @@
         "jarLibraries": [],
         "eggLibraries": []
     },
+    "r": null,
     "inferencingStackVersion": null
 }

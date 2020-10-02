@@ -4,20 +4,17 @@ import json
 
 ws = Workspace.from_config()
 
-list_env = Environment.list(workspace=ws)
-
-def show_available_environment():
+def show_available_environment(workspace):
+    list_env = Environment.list(workspace=workspace)
     for env in list_env:
         if env.startswith("AzureML"):
             print("Name",env)
             print("packages", list_env[env].python.conda_dependencies.serialize_to_string())
 
-
-print(Path(__file__).parent)
 with open(Path(__file__).parent / 'configuration.json', 'r') as config_file:
     config = json.load(config_file)
 
-name = config['environment_name']
+name = config['environment_base']
 env = Environment.get(workspace=ws, name=name)
 
 # From a Conda specification file
@@ -34,6 +31,6 @@ env = Environment.get(workspace=ws, name=name)
 
 #
 
-Environment.save_to_directory(env, path = Path("./operation/configuration/environment_dev"), overwrite = True)
-Environment.save_to_directory(env, path = Path("./operation/configuration/environment_stage"), overwrite = True)
-Environment.save_to_directory(env, path = Path("./operation/configuration/environment_prod"), overwrite = True)
+Environment.save_to_directory(env, path = Path("./operation/configuration/environment_data"), overwrite = True)
+Environment.save_to_directory(env, path = Path("./operation/configuration/environment_training"), overwrite = True)
+Environment.save_to_directory(env, path = Path("./operation/configuration/environment_inference"), overwrite = True)
