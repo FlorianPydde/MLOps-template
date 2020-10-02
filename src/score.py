@@ -2,7 +2,6 @@ import joblib
 import pandas as pd
 import argparse 
 from azureml.core.model import Model
-from utils import retrieve_workspace
 import os
 
 # from inference_schema.schema_decorators import input_schema, output_schema
@@ -19,12 +18,11 @@ def init():
     # model_reg = Model(ws, name = model_name)
     # model_reg.download('./model', exist_ok = False)
     # model = joblib.load('./model/model_name)
-    # model_path = Model.get_model_path()
 
 
     # Retrieve the path to the model file using the model name
-    model_path = os.path.join(os.getenv('AZUREML_MODEL_DIR'), '<model name here>')
-
+    model_file = os.getenv('MODEL_FILE_NAME','mymodel.pkl')
+    model_path = os.path.join(os.getenv('AZUREML_MODEL_DIR'), model_file)
     model = joblib.load(model_path)
 
 
