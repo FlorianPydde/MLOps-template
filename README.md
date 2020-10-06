@@ -46,6 +46,10 @@ datastore/dataset name: if you are using different data source during your CI/CD
 
 We do not provide any concrete implementation of MLOps but only the folder structure and some examples, as the naming convention and logical flow highly depend on the use case. Nevertheless, ou may want to have a look at the utils.py modules which handle the credentials.
 
+## FAQ
+
+TBD 
+
 ## Contributing
 
 TBD
@@ -178,7 +182,7 @@ We will list here the different approach to package your service:
 
 ### Variable Handling
 
-**!DO NOT ADDED ANY SECRETS OR KEYS IN CONFIGURATION FILES THAT ARE NOT PART OF THE GITIGNORE!**
+**!DO NOT ADD ANY SECRETS OR KEYS IN CONFIGURATION FILES!**
 
 There are many constants and variables to handle in a data science project, as for instance the datasets name, the model name, model variables, etc. It is important to distinguish between configuration variables and environment variables. Indeed, environment variables only depend on the environment in which a script is run, i.e dev/stage/prod (or whatever the convention). Hence, we recommend to understand what needs to be stored in a config/settings file and what should come from the os environment. It is not necessary to define a specific _.ENV_ files as the variables will be added in the CI/CD pipelines in Azure DevOps (or whatever DevOps tool one uses). Indeed, when developing in dev, we can simply use the default function ```os.getenv('ENV_VARIABLE', 'your-dev-env-variable')```.
 
