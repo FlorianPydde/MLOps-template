@@ -72,9 +72,9 @@ TBD
 ├───notebooks           # experimentation folder with notebooks, code and other. The files don't need to be committed
 ├───operation           # all the code and configuration to execute the source scripts
 │   ├───configuration   # any configuration files
-│   │   ├───environment_data
-│   │   ├───environment_train
-│   │   └───environment_inference
+│   │   ├───environment_data (optional)
+│   │   ├───environment_train (optional)
+│   │   └───environment_inference (optional)
 │   ├───execution       # azure ml scripts to run source script on remote
 │   ├───monitoring      # anything related to monitoring, model performance, data drifts, model scoring, etc
 │   └───tests           # for testing your code, data, and outputs
